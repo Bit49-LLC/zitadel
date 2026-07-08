@@ -68,10 +68,18 @@ export default async function RootLayout({ children }: { children: React.ReactNo
                 >
                   <div className="relative mx-auto w-full max-w-[1100px] py-8">
                     <div>{children}</div>
-                    <div className="mx-auto flex max-w-[440px] flex-row items-center justify-end space-x-4 px-4 py-4 md:max-w-full md:px-8">
-                      <LanguageSwitcher languages={languages} />
-                      <ThemeSwitch />
-                    </div>
+                    {/* ThemeSwitch hides itself when branding forces a theme; the language
+                        switcher is opt-in per Revolve design (build-time flag) */}
+                    {process.env.NEXT_PUBLIC_SHOW_LANGUAGE_SWITCHER === "true" ? (
+                      <div className="mx-auto flex max-w-[440px] flex-row items-center justify-end space-x-4 px-4 py-4 md:max-w-full md:px-8">
+                        <LanguageSwitcher languages={languages} />
+                        <ThemeSwitch />
+                      </div>
+                    ) : (
+                      <div className="mx-auto flex max-w-[440px] flex-row items-center justify-end space-x-4 px-4 py-4 md:max-w-full md:px-8">
+                        <ThemeSwitch />
+                      </div>
+                    )}
                   </div>
                 </BackgroundWrapper>
               </LanguageProvider>
