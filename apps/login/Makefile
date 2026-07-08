@@ -14,6 +14,10 @@
 
 ZITADEL_INSTANCE := revolve-labs-uat-t3wtma.zitadel.cloud
 
+# Image coordinates — override from CI: make docker-build TAG=$GITHUB_SHA
+IMAGE ?= us-central1-docker.pkg.dev/eos-platform-develop/saas/login-ui
+TAG ?= dev
+
 .PHONY: dev
 dev:
 	ZITADEL_API_URL=https://$(ZITADEL_INSTANCE) \
@@ -35,9 +39,28 @@ dev-debug:
 # login form: in `pnpm dev` (Turbopack) React never hydrates on this route, so
 # inputs don't register and Continue stays disabled. The production build
 # hydrates fine. Rebuild with `make build` after code changes.
+# Install deps and build the workspace packages the login app depends on
+# (@zitadel/proto is generated, @zitadel/client is compiled). Idempotent.
+.PHONY: prepare
+prepare:
+	cd ../.. && pnpm install --filter @zitadel/login...
+	cd ../.. && pnpm --filter @zitadel/proto run generate
+	cd ../.. && pnpm --filter @zitadel/client run build
+
 .PHONY: build
 build:
 	pnpm run build
+
+# Full chain for CI and local image builds: workspace prep -> Next.js
+# standalone build -> docker build. The Dockerfile only COPYs .next/standalone,
+# so the pnpm build MUST run before docker build.
+.PHONY: docker-build
+docker-build: prepare build
+	docker build -t $(IMAGE):$(TAG) .
+
+.PHONY: docker-push
+docker-push:
+	docker push $(IMAGE):$(TAG)
 
 .PHONY: prod
 prod:
