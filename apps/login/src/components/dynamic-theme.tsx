@@ -53,7 +53,10 @@ export function DynamicTheme({
                 <Card>
                   <div className="flex min-h-[400px]">
                     {/* Left side: First child + branding */}
-                    <div className="from-primary-50 to-primary-100 dark:from-primary-900/20 dark:to-primary-800/20 flex w-1/2 flex-col justify-center bg-gradient-to-br p-4 lg:p-8">
+                    {/* Brand panel: primary-* shades come from the Zitadel branding API via
+                        CSS vars, so the gradient follows per-org branding automatically.
+                        (Upstream classes referenced non-existent `primary-50` colors.) */}
+                    <div className="from-primary-light-100/60 to-primary-light-200 dark:from-primary-dark-900/40 dark:to-primary-dark-700/30 flex w-1/2 flex-col justify-center bg-gradient-to-br p-4 lg:p-8">
                       <div className="mx-auto max-w-[440px] space-y-8">
                         {/* Logo and branding */}
                         {branding && (
