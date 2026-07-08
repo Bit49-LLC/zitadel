@@ -101,13 +101,14 @@ export function DynamicTheme({
             return (
               <div className="relative mx-auto w-full max-w-[416px] px-4 py-4">
                 <Card>
-                  <div className="mx-auto flex flex-col items-center space-y-8">
-                    <div className="relative flex flex-row items-center justify-center">
+                  <div className="mx-auto flex flex-col items-center">
+                    {/* Brand block: logo 12px above subtitle, 32px above the form (FE: mt-3 / mb-8) */}
+                    <div className="relative mb-3 flex flex-row items-center justify-center">
                       {branding && (
                         <Logo
                           lightSrc={branding.lightTheme?.logoUrl}
                           darkSrc={branding.darkTheme?.logoUrl}
-                          height={40}
+                          height={26}
                           width={140}
                         />
                       )}
@@ -116,7 +117,7 @@ export function DynamicTheme({
                     {hasMultipleChildren ? (
                       <>
                         {/* Title and description - center aligned, subtitle-sized per Revolve design */}
-                        <div className="mb-4 flex w-full flex-col items-center text-center [&_h1]:text-sm [&_h1]:font-normal [&_h1]:text-gray-500 dark:[&_h1]:text-gray-400">
+                        <div className="mb-8 flex w-full flex-col items-center text-center [&_h1]:text-sm [&_h1]:font-normal [&_h1]:text-slate-400 dark:[&_h1]:text-slate-500">
                           {titleContent}
                         </div>
 
@@ -127,11 +128,9 @@ export function DynamicTheme({
                       // Single child - use original behavior
                       <div className="w-full">{actualChildren}</div>
                     )}
-
-                    <div className="flex flex-row justify-between"></div>
                   </div>
                 </Card>
-                <div className="mt-6 text-center text-xs text-gray-400 dark:text-gray-500">
+                <div className="mt-6 text-center text-xs text-slate-400">
                   Revolve Analytics © {new Date().getFullYear()}
                 </div>
               </div>

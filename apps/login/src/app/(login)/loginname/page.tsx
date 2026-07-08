@@ -47,13 +47,11 @@ export default async function Page(props: { searchParams: Promise<Record<string 
 
   return (
     <DynamicTheme branding={branding}>
+      {/* Revolve design: single subtitle line under the logo, no description */}
       <div className="flex flex-col space-y-4">
         <h1>
           <Translated i18nKey="title" namespace="loginname" />
         </h1>
-        <p className="ztdl-p">
-          <Translated i18nKey="description" namespace="loginname" />
-        </p>
       </div>
 
       <div className="w-full">

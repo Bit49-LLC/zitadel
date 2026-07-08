@@ -16,6 +16,10 @@
 html {
   --background-color: #ffffff;
   --dark-background-color: #000000;
+  // Same stack as eos-platform-fe. Must live in a stylesheet (not an inline
+  // style): theme-wrapper.tsx removes the documentElement inline font-family
+  // at runtime when branding has no custom font.
+  font-family: "Roboto Narrow", Roboto, ui-sans-serif, system-ui, sans-serif;
 }
 
 .form-checkbox:checked {

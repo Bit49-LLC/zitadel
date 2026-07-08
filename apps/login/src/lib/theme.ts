@@ -86,7 +86,7 @@ export const ROUNDNESS_CLASSES = {
   mid: {
     card: "rounded-2xl",
     button: "rounded-lg",
-    input: "rounded-lg",
+    input: "rounded",
     image: "rounded-lg",
     avatar: "rounded-lg",
     avatarContainer: "rounded-md",
@@ -117,7 +117,7 @@ export function getComponentRoundness(componentType: keyof ComponentRoundnessCon
 export const SPACING_STYLES = {
   regular: {
     spacing: "space-y-6",
-    padding: "p-6 py-8",
+    padding: "p-8",
   },
   compact: {
     spacing: "space-y-4",
@@ -135,7 +135,8 @@ export const APPEARANCE_STYLES = {
     background: "bg-background-light-500 dark:bg-background-dark-500", // Same as usual background
   },
   material: {
-    card: "bg-background-light-400 dark:bg-background-dark-500 shadow-md border-0",
+    // Shadow matches the RN shadow-md the FE renders: 0 3px 10px rgba(0,0,0,0.35)
+    card: "bg-white dark:bg-background-dark-500 shadow-[0_3px_10px_rgba(0,0,0,0.35)] border-0",
     button: "shadow hover:shadow-xl active:shadow-xl", // Material shadows for buttons
     "idp-button":
       "!bg-background-[#00000020] !dark:bg-background-[#ffffff50] transition shadow shadow-md hover:shadow-lg active:shadow-xl", // Material shadows for IDP buttons

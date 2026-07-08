@@ -12,14 +12,12 @@ import { getAllowedLanguages } from "@/lib/zitadel";
 import * as Tooltip from "@radix-ui/react-tooltip";
 import type { Metadata } from "next";
 import { getTranslations } from "next-intl/server";
-import { Lato } from "next/font/google";
 import { headers } from "next/headers";
 import React, { Suspense } from "react";
 
-const lato = Lato({
-  weight: ["400", "700", "900"],
-  subsets: ["latin"],
-});
+// Font: the Revolve stack is set on html in globals.scss (stylesheet, not
+// inline — theme-wrapper.tsx strips inline font-family when branding has no
+// custom font).
 
 export async function generateMetadata(): Promise<Metadata> {
   const t = await getTranslations("common");
@@ -43,7 +41,7 @@ export default async function RootLayout({ children }: { children: React.ReactNo
   }
 
   return (
-    <html className={`${lato.className}`} suppressHydrationWarning>
+    <html suppressHydrationWarning>
       <head />
       <body>
         <ThemeProvider>
@@ -51,7 +49,7 @@ export default async function RootLayout({ children }: { children: React.ReactNo
             <Suspense
               fallback={
                 <BackgroundWrapper
-                  className={`bg-background-light-600 dark:bg-background-dark-600 relative flex min-h-screen flex-col justify-center`}
+                  className={`bg-slate-50 dark:bg-background-dark-600 relative flex min-h-screen flex-col justify-center`}
                 >
                   <div className="relative mx-auto w-full max-w-[440px] py-8">
                     <Skeleton>
@@ -66,7 +64,7 @@ export default async function RootLayout({ children }: { children: React.ReactNo
             >
               <LanguageProvider>
                 <BackgroundWrapper
-                  className={`bg-background-light-600 dark:bg-background-dark-600 relative flex min-h-screen flex-col justify-center`}
+                  className={`bg-slate-50 dark:bg-background-dark-600 relative flex min-h-screen flex-col justify-center`}
                 >
                   <div className="relative mx-auto w-full max-w-[1100px] py-8">
                     <div>{children}</div>
