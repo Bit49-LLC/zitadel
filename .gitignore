@@ -82,6 +82,7 @@ build/local/*.env
 node_modules/
 .kreya
 login-client.pat
+iac-admin.pat
 admin.pat
 .env.*local
 
