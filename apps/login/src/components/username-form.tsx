@@ -141,13 +141,12 @@ export function UsernameForm({
             <Alert>{error}</Alert>
           </div>
         )}
-        <div className="mt-4 flex w-full flex-row items-center">
-          <BackButton data-testid="back-button" />
-          <span className="flex-grow"></span>
+        {/* Revolve design: full-width primary action, back demoted to a subtle link below */}
+        <div className="mt-4 flex w-full flex-col items-center gap-2">
           <Button
             data-testid="submit-button"
             type="submit"
-            className="self-end"
+            className="w-full justify-center"
             variant={ButtonVariants.Primary}
             disabled={loading || !formState.isValid}
             onClick={handleSubmit((e) => submitLoginName(e, organization))}
@@ -155,6 +154,7 @@ export function UsernameForm({
             {loading && <Spinner className="mr-2 h-5 w-5" />}
             <Translated i18nKey="submit" namespace="loginname" />
           </Button>
+          <BackButton data-testid="back-button" />
         </div>
       </form>
     </>
