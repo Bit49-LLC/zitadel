@@ -1,0 +1,62 @@
+# Revolve-only workflow (not upstream's): builds the login app image and rolls
+# it out to the login-ui Cloud Run service in eos-platform-develop.
+#
+# No paths filter on purpose: rebase force-pushes make paths deltas unreliable,
+# and every push to revolve-login should produce a deployable image anyway.
+# Terraform in Bit49-LLC/eos-platform owns the service config; this workflow
+# only moves the image forward (same split as the platform's other services).
+
+name: Deploy login-ui
+
+on:
+  push:
+    branches:
+      - revolve-login
+  workflow_dispatch:
+
+concurrency:
+  group: deploy-login-ui
+  cancel-in-progress: false
+
+jobs:
+  deploy:
+    runs-on: ubuntu-latest
+    environment: develop
+    permissions:
+      contents: read
+      id-token: write
+    env:
+      IMAGE: ${{ vars.REGION }}-docker.pkg.dev/${{ vars.GCP_PROJECT }}/saas/login-ui
+
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v6.0.2
+
+      - name: Setup Node
+        uses: actions/setup-node@v4
+        with:
+          node-version: 22
+
+      - name: Enable corepack (pnpm)
+        run: corepack enable
+
+      - name: Authenticate to Google Cloud
+        uses: google-github-actions/auth@v3.0.0
+        with:
+          workload_identity_provider: ${{ secrets.WIF_PROVIDER }}
+          service_account: sa-cicd-manager@${{ vars.GCP_PROJECT }}.iam.gserviceaccount.com
+
+      - name: Configure Docker for Artifact Registry
+        run: gcloud auth configure-docker ${{ vars.REGION }}-docker.pkg.dev
+
+      - name: Build and push image
+        working-directory: apps/login
+        run: make docker-build docker-push IMAGE="$IMAGE" TAG=${{ github.sha }}
+
+      - name: Roll out to Cloud Run
+        run: |
+          gcloud run services update login-ui \
+            --image="$IMAGE:${{ github.sha }}" \
+            --region=${{ vars.REGION }} \
+            --project=${{ vars.GCP_PROJECT }} \
+            --quiet
